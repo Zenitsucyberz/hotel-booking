@@ -14,7 +14,7 @@ class Reservation extends Model
             'reservable_id',
             'invoice_no'   ,
             'business_id'  ,
-            'hotel_customer_id',
+            'customer_id',
             'hotel_room_id' ,
             'check_in_date',
             'check_out_date',

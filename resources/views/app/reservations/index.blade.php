@@ -13,27 +13,46 @@
 
 
 
-                    
-                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700" id="resTable">
                         <thead>
                             <tr>
 
-                                <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">#</th>
-                                <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Reservable Id</th>
-                                <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Room Id</th>
-                                <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Customer Id</th>
-                                <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Check In Time</th>
-                                <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Check Out Time</th>
-                                <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Net Total Amount</th>
-                                <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Payment Status</th>
-                                <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Booking Date</th>
-                                <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Confirmation</th>
-                                <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Action</th>
 
-                                
+                                <th scope="col"
+                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Reservable
+                                    Id</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Room Id
+                                </th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Customer Id
+                                </th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Check In
+                                    Time</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Check Out
+                                    Time</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Net Total
+                                    Amount</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Payment
+                                    Status</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Booking
+                                    Date</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
+                                    Confirmation</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Action</th>
+
+
                             </tr>
                         </thead>
-                        <tbody>
+                        {{-- <tbody id="sortable">
                               @foreach ($reservations as $reservation)
                                 <tr>
 
@@ -50,7 +69,7 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ">{{ $reservation->booking_date}}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ">{{ $reservation->is_confirmed}}</td>
                                     
-                                     {{--<td class="px-6 py-4 whitespace-nowrap text-sm font-medium "><x-btn-link
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium "><x-btn-link
                                             href="{{ route('reservations.edit', $reservation->id) }}">Edit</x-btn-link>
 
 
@@ -59,7 +78,7 @@
 
                                         <x-danger-button class="delete-button"
                                             data-action="{{ route('reservations.destroy', $reservation->id) }}">Delete</x-danger-button>
-                                     </td> --}}
+                                     </td>
 
 
 
@@ -68,7 +87,7 @@
                             @endforeach  
 
 
-                        </tbody>
+                        </tbody> --}}
                     </table>
 
                 </div>
@@ -79,33 +98,87 @@
 
 
 
-     <x-slot name="scripts">
+    <x-slot name="scripts">
         <script>
-            $('.delete-button').click(function(e) {
+            $(document).ready(function() {
 
 
-                e.preventDefault();
-                $.ajax({
-                    url: $(this).data('action'),
-                    type: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(data) {
-                        alert(data.message)
-                        location.reload();QQQ
-                    },
-                    error: function(error) {
-                        console.error('Error:', error);
-                        if (typeof errorCallback === 'function') {
-                            errorCallback(error);
-                        }
-                    }
+
+
+
+               
+
+
+
+                // Initialize
+                $('#resTable').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: "{{ route('getDataTableData') }}",
+                    columns: [{
+                            data: 'invoice_no'
+                        },
+                        {
+                            data: 'room_label'
+                        },
+                        {
+                            data: 'customer_name'
+                        },
+                        {
+                            data: 'check_in_time'
+                        },
+                        {
+                            data: 'check_out_time'
+                        },
+                        {
+                            data: 'net_total_amount'
+                        },
+                        {
+                            data: 'payment_status'
+                        },
+                        {
+                            data: 'booking_date'
+                        },
+                        {
+                            data: 'is_confirmed'
+                        },
+                        {
+                            data: 'actions'
+                        },
+                    ]
                 });
-            })
+            });
+
+
+
+
+            $(document).on('click', '.delete-button', function(e) {
+    e.preventDefault();
+    
+    var actionUrl = $(this).data('action');
+
+    $.ajax({
+        url: actionUrl,
+        type: 'DELETE',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(data) {
+            alert(data.message);
+            location.reload();
+        },
+        error: function(error) {
+            console.error('Error:', error);
+            if (typeof errorCallback === 'function') {
+                errorCallback(error);
+            }
+        }
+    });
+});
+
         </script>
 
-    </x-slot> 
+    </x-slot>
 
 
 

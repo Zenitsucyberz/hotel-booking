@@ -37,7 +37,7 @@ return new class extends Migration
             $table->string('reservation_status', 20);
             $table->string('payment_status', 20);
             $table->string('payment_method', 50);
-            $table->date('booking_date');
+            $table->date('booked_on');
             $table->dateTime('check_in_time');
             $table->dateTime('check_out_time');
             $table->boolean('is_confirmed');

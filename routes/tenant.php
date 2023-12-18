@@ -54,12 +54,18 @@ Route::middleware([
             Route::resource('roomcategories', RoomCategoryController::class);
             Route::resource('aminities', AminityController::class);
             Route::resource('rooms',RoomsController::class);
+
+
+            Route::post('/customers/sort-customer',[AppCustomerController::class,'sortCustomer'])->name('customers.sortCustomer');
             Route::resource('customers',AppCustomerController::class);
+
+         // reservations
+         Route::post('/reservations/check-room-availability',[ReservationController::class,'checkRoomAvailability'])->name('reservations.checkRoomAvailability');
+         Route::get('/getdatatabledata', [ReservationController::class, 'getDataTableData'])->name('getDataTableData');
+            Route::resource('reservations',ReservationController::class);
             
         });
-        Route::middleware(['setReservationUser'])->group(function () {
-            Route::resource('reservations',ReservationController::class);
-        });
+       
     });
 
     require __DIR__ . '/tenant-auth.php';

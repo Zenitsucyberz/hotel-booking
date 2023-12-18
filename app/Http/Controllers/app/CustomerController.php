@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\app;
 
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use App\Models\HotelCustomer;
 use Illuminate\Http\Request;
+
+use function Laravel\Prompts\search;
 
 class CustomerController extends Controller
 {
@@ -13,7 +16,7 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        $customers = HotelCustomer::all();
+        $customers = Customer::all();
         return view('app.customer.index',['customers'=>$customers]);
     }
 
@@ -41,7 +44,7 @@ class CustomerController extends Controller
 
         
        ]);
-       HotelCustomer::create($input);
+       Customer::create($input);
        return redirect()->route('customers.index');
     }
 
@@ -56,7 +59,7 @@ class CustomerController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(HotelCustomer $customer)
+    public function edit(Customer $customer)
     {
         return view('app.customer.edit',['customer'=>$customer]);
     }
@@ -64,7 +67,7 @@ class CustomerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, HotelCustomer $customer)
+    public function update(Request $request, Customer $customer)
     {
         $input = $request->validate([
             'customer_name' => ['required','string'],
@@ -84,9 +87,29 @@ class CustomerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(HotelCustomer $customer)
+    public function destroy(Customer $customer)
     {
         $customer->delete();
         return response()->json(['message' => 'Customer Deleted Successfully']);
+    }
+
+
+    public function sortCustomer(Request $request)
+    {
+        $search = $request->search;
+
+
+        $customers = Customer::select('id',
+        'customer_name as text');
+        
+        if ($search != '')
+        {
+            $customers =  $customers->where("customer_name", "LIKE", "%" . $search . "%");
+        }
+        $customers = $customers->limit(5)->get();
+
+        
+        
+        return response()->json($customers->toArray()); 
     }
 }
