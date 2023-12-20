@@ -19,6 +19,8 @@ class Reservation extends Model
             'check_in_date',
             'check_out_date',
             'guest_count',
+            'adults',
+            'children',
             'total_amount',
             'discount_type',
             'discount_amount',

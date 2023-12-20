@@ -9,11 +9,13 @@ use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 use App\Http\Controllers\app\{
     BusinessController,
     CustomerController as AppCustomerController,
+    CustomerInfoController,
     ProfileController,
     ReservationController,
     UserController,
     RoomCategoryController,
     RoomsController,
+    TaxController,
 };
 use App\Http\Controllers\CustomerController;
 
@@ -63,7 +65,10 @@ Route::middleware([
          Route::post('/reservations/check-room-availability',[ReservationController::class,'checkRoomAvailability'])->name('reservations.checkRoomAvailability');
          Route::get('/getdatatabledata', [ReservationController::class, 'getDataTableData'])->name('getDataTableData');
             Route::resource('reservations',ReservationController::class);
-            
+
+            // Tax Details
+            Route::resource('taxes',TaxController::class);
+
         });
        
     });

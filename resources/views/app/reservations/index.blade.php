@@ -11,10 +11,14 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
 
+                    <div style="margin: 20px 0px;">
+                        <strong>Date Filter:</strong>
+                        <input type="text" name="daterange" value="" />
+                        {{-- <button class="btn btn-success filter">Filter</button> --}}
+                    </div>
 
 
-
-                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700" id="resTable">
+                    <table class="max-w-full divide-y divide-gray-400 dark:divide-gray-700" id="resTable">
                         <thead>
                             <tr>
 
@@ -41,8 +45,8 @@
                                     class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Payment
                                     Status</th>
                                 <th scope="col"
-                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Booking
-                                    Date</th>
+                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Booked
+                                    On</th>
                                 <th scope="col"
                                     class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
                                     Confirmation</th>
@@ -104,17 +108,29 @@
 
 
 
+                $('input[name="daterange"]').daterangepicker({
+                    startDate: moment(),
+                    endDate: moment().add(1,'year')
+                });
 
 
-               
 
 
 
                 // Initialize
-                $('#resTable').DataTable({
+               
+                var table = $('#resTable').DataTable({
                     processing: true,
                     serverSide: true,
-                    ajax: "{{ route('getDataTableData') }}",
+                    ajax: {
+                        url: "{{ route('getDataTableData') }}",
+                        data: function(d) {
+                            d.check_in_time= $('input[name="daterange"]').data('daterangepicker').startDate
+                                .format('YYYY-MM-DD');
+                            d.check_out_time = $('input[name="daterange"]').data('daterangepicker').endDate.format(
+                                'YYYY-MM-DD');
+                        }
+                    },
                     columns: [{
                             data: 'invoice_no'
                         },
@@ -147,35 +163,47 @@
                         },
                     ]
                 });
+
+
+                $(".applyBtn").click(function() {
+                    table.draw();
+                });
             });
 
 
 
 
             $(document).on('click', '.delete-button', function(e) {
-    e.preventDefault();
-    
-    var actionUrl = $(this).data('action');
+                e.preventDefault();
 
-    $.ajax({
-        url: actionUrl,
-        type: 'DELETE',
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        success: function(data) {
-            alert(data.message);
-            location.reload();
-        },
-        error: function(error) {
-            console.error('Error:', error);
-            if (typeof errorCallback === 'function') {
-                errorCallback(error);
-            }
-        }
-    });
-});
+                var actionUrl = $(this).data('action');
 
+                $.ajax({
+                    url: actionUrl,
+                    type: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(data) {
+                        alert(data.message);
+                        location.reload();
+                    },
+                    error: function(error) {
+                        console.error('Error:', error);
+                        if (typeof errorCallback === 'function') {
+                            errorCallback(error);
+                        }
+                    }
+                });
+            });
+
+           
+
+
+            $('input[name="daterange"]').daterangepicker({
+                startDate: moment().subtract(1, 'M'),
+                endDate: moment()
+            });
         </script>
 
     </x-slot>

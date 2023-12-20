@@ -70,6 +70,22 @@
                                 <x-input-error :messages="$errors->get('guest_count')" class="mt-2" />
                             </div>
 
+                            <div class="mb-4">
+                                <x-input-label for="adults" :value="__('Adult No')" />
+                                <x-text-input id="adults" class="block mt-1 w-full customer" type="text"
+                                    name="adults" :value="old('adults')" required autofocus
+                                    autocomplete="adults" />
+                                <x-input-error :messages="$errors->get('adults')" class="mt-2" />
+                            </div>
+
+                            <div class="mb-4">
+                                <x-input-label for="children" :value="__('Child No')" />
+                                <x-text-input id="children" class="block mt-1 w-full customer" type="text"
+                                    name="children" :value="old('children')" required autofocus
+                                    autocomplete="children" />
+                                <x-input-error :messages="$errors->get('childrens')" class="mt-2" />
+                            </div>
+
 
                             <x-btn-link href="{{ route('customers.create') }}">
 
@@ -124,21 +140,16 @@
 
                                 <select class="customer" id="tax_id" name="tax_id">
 
-                                    <option value="1">5%</option>
-                                    <option value="2">12%</option>
-                                    <option value="3">18%</option>
+                                    @foreach ($taxes as $tax)
+                                        <option value="{{ $tax->id }}">{{ $tax->name }}</option>
+                                    @endforeach
                                 </select>
 
 
                                 <x-input-error :messages="$errors->get('tax_id')" class="mt-2" />
                             </div>
 
-                            <div class="mb-4">
-                                <x-input-label for="tax_amount" :value="__('Tax Amount')" />
-                                <x-text-input id="tax_amount" class="block mt-1 w-full" type="text" name="tax_amount"
-                                    :value="old('tax_amount')" required autofocus autocomplete="tax_amount" />
-                                <x-input-error :messages="$errors->get('tax_amount')" class="mt-2" />
-                            </div>
+                            {{-- --}}
 
                             <div class="mb-4">
                                 <x-input-label for="sgst_amount" :value="__('SGST Amount')" />
@@ -155,7 +166,12 @@
                             </div>
                             
 
-                            
+                            <div class="mb-4">
+                                <x-input-label for="total_amount" :value="__('Total Amount')" />
+                                <x-text-input id="total_amount" class="block mt-1 w-full" type="text" name="total_amount"
+                                    :value="old('total_amount')" required autofocus autocomplete="total_amount" />
+                                <x-input-error :messages="$errors->get('total_amount')" class="mt-2" />
+                            </div> 
 
                             
 
@@ -465,8 +481,9 @@
                                 if (result.success == true) {
                                    var roomAmount = $('#room_amount').val(result.data.rent);
                                    var discountedAmount =  $('#discounted_amount').val(result.data.discounted_amount);
-                                   var taxAmount =  $('#tax_amount').val(result.data.taxes);
-                                   var netTotalAmount =  $('#net_total_amount').val(result.data.taxes);
+                                   var totalAmount =  $('#total_amount').val(result.data.total);
+                                   var roundOffAmount =  $('#round_off_amount').val(result.data.roundOffAmount);
+                                   var netTotalAmount =  $('#net_total_amount').val(result.data.netTotal);
                                    var sgstAmount = $('#sgst_amount').val(result.data.sgst)
                                    var cgstAmount =$('#cgst_amount').val(result.data.cgst)
                                     $('#add').prop('disabled', false);

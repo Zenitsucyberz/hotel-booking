@@ -80,6 +80,11 @@
                                 </x-dropdown-link>
 
 
+                                <x-dropdown-link :href="route('taxes.index')">
+                                    {{ __('Taxes') }}
+                                </x-dropdown-link>
+
+
                                 <x-dropdown-link :href="route('customers.index')">
                                     {{ __('Customers') }}
                                 </x-dropdown-link>
