@@ -1,77 +1,67 @@
 <?php
 
-declare(strict_types=1);
-
-use App\Http\Controllers\app\AminityController;
+use App\Http\Controllers\Tenant\AuthenticatedSessionController;
+use App\Http\Controllers\Tenant\ConfirmablePasswordController;
+use App\Http\Controllers\Tenant\EmailVerificationNotificationController;
+use App\Http\Controllers\Tenant\EmailVerificationPromptController;
+use App\Http\Controllers\Tenant\NewPasswordController;
+use App\Http\Controllers\Tenant\PasswordController;
+use App\Http\Controllers\Tenant\PasswordResetLinkController;
+use App\Http\Controllers\Tenant\RegisteredController;
+use App\Http\Controllers\Tenant\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
-use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
-use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
-use App\Http\Controllers\app\{
-    BusinessController,
-    CustomerController as AppCustomerController,
-    CustomerInfoController,
-    ProfileController,
-    ReservationController,
-    UserController,
-    RoomCategoryController,
-    RoomsController,
-    TaxController,
-};
-use App\Http\Controllers\CustomerController;
-
-/*
-|--------------------------------------------------------------------------
-| Tenant Routes
-|--------------------------------------------------------------------------
-|
-| Here you can register the tenant routes for your application.
-| These routes are loaded by the TenantRouteServiceProvider.
-|
-| Feel free to customize them however you want. Good luck!
-|
-*/
-
-Route::middleware([
-    'web',
-    InitializeTenancyByDomain::class,
-    PreventAccessFromCentralDomains::class,
-])->group(function () {
-    Route::get('/', function () {
-        return view('app.welcome');
-    });
 
 
-    Route::get('/dashboard', function () {
-        return view('app.dashboard');
-    })->middleware(['auth', 'verified'])->name('dashboard');
-
-    Route::middleware('auth')->group(function () {
-        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-        Route::group(['middleware' => ['role:admin']], function () {
-            Route::resource('users', UserController::class);
-            Route::resource('business', BusinessController::class);
-            Route::resource('roomcategories', RoomCategoryController::class);
-            Route::resource('aminities', AminityController::class);
-            Route::resource('rooms',RoomsController::class);
+Route::name('tenant.')
+    ->group(function () {
 
 
-            Route::post('/customers/sort-customer',[AppCustomerController::class,'sortCustomer'])->name('customers.sortCustomer');
-            Route::resource('customers',AppCustomerController::class);
+        Route::middleware('guest')->group(function () {
 
-         // reservations
-         Route::post('/reservations/check-room-availability',[ReservationController::class,'checkRoomAvailability'])->name('reservations.checkRoomAvailability');
-         Route::get('/getdatatabledata', [ReservationController::class, 'getDataTableData'])->name('getDataTableData');
-            Route::resource('reservations',ReservationController::class);
 
-            // Tax Details
-            Route::resource('taxes',TaxController::class);
+            Route::get('register', [RegisteredController::class, 'create'])
+                ->name('register');
 
+            Route::post('register', [RegisteredController::class, 'store']);
+
+            Route::get('login', [AuthenticatedSessionController::class, 'create'])
+                ->name('login');
+
+            Route::post('login', [AuthenticatedSessionController::class, 'store']);
+
+            Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
+                ->name('password.request');
+
+            Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
+                ->name('password.email');
+
+            Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
+                ->name('password.reset');
+
+            Route::post('reset-password', [NewPasswordController::class, 'store'])
+                ->name('password.store');
         });
-       
-    });
 
-    require __DIR__ . '/tenant-auth.php';
-});
+        Route::middleware('auth')->group(function () {
+            Route::get('verify-email', EmailVerificationPromptController::class)
+                ->name('verification.notice');
+
+            Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
+                ->middleware(['signed', 'throttle:6,1'])
+                ->name('verification.verify');
+
+            Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
+                ->middleware('throttle:6,1')
+                ->name('verification.send');
+
+            Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])
+                ->name('password.confirm');
+
+            Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
+
+            Route::put('password', [PasswordController::class, 'update'])->name('password.update');
+
+            Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
+                ->name('logout');
+        });
+    });

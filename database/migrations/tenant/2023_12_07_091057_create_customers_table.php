@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('customer_address2')->nullable();
             $table->string('city')->nullable();
             $table->string('state')->nullable();
-            $table->tinyInteger('pincode')->nullable();
-            $table->tinyInteger('phone')->nullable();
+            $table->bigInteger('pincode')->nullable();
+            $table->bigInteger('phone')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -28,22 +28,27 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
         $domains = $this->centralDomains();
-        
-        $this->routes(function () use ($domains) {
-            foreach($domains as $domain){
-                Route::middleware('api')
-                ->prefix('api')
-                ->domain($domain)
-                ->group(base_path('routes/api.php'));
 
-            Route::middleware('web')
-                ->domain($domain)
-                ->group(base_path('routes/web.php'));
+        $this->routes(function () use ($domains) {
+            foreach ($domains as $domain) {
+                Route::middleware('api')
+                    ->prefix('api')
+                    ->domain($domain)
+                    ->group(base_path('routes/api.php'));
+
+                Route::middleware('web')
+                    ->domain($domain)
+                    ->group(base_path('routes/web.php'));
+
+
+
+                Route::middleware('web')
+                    ->domain($domain)
+                    ->group(base_path('routes/tenant.php'));
             }
-            
         });
     }
-    protected function centralDomains():array
+    protected function centralDomains(): array
     {
         return config('tenancy.central_domains');
     }

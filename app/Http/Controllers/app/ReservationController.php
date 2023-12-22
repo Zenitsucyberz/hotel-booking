@@ -14,6 +14,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PDF;
 
 class ReservationController extends Controller
 {
@@ -382,5 +383,12 @@ class ReservationController extends Controller
             })
             ->rawColumns(['actions'])
             ->make();
+    }
+
+    public function invoice(Reservation $reservation)
+    {
+        $pdf = PDF::loadView('invoice.pdf',['reservation' => $reservation]);
+
+        return $pdf->stream('invoice.pdf');
     }
 }

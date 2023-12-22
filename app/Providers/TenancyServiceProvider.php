@@ -29,7 +29,7 @@ class TenancyServiceProvider extends ServiceProvider
                 JobPipeline::make([
                     Jobs\CreateDatabase::class,
                     Jobs\MigrateDatabase::class,
-                    
+
                     Jobs\SeedDatabase::class,
                     \App\Jobs\SeedTenantJob::class,
 
@@ -134,9 +134,9 @@ class TenancyServiceProvider extends ServiceProvider
 
     protected function mapRoutes()
     {
-        if (file_exists(base_path('routes/tenant.php'))) {
+        if (file_exists(base_path('routes/tenant/web.php'))) {
             Route::namespace(static::$controllerNamespace)
-                ->group(base_path('routes/tenant.php'));
+                ->group(base_path('routes/tenant/web.php'));
         }
     }
 

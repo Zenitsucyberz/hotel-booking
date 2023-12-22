@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('hotel_rooms', function (Blueprint $table) {
             $table->id();
             $table->string('room_label')->nullable();
-            $table->string('room_no')->nullable();
+            $table->string('room_count')->nullable();
             $table->unsignedBigInteger('hotel_room_category_id')->nullable();
             $table->foreign('hotel_room_category_id')->references('id')->on('hotel_room_categories');
             $table->string('image')->nullable();

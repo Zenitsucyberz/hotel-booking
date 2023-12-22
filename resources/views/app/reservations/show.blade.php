@@ -68,8 +68,8 @@
                     <td class="text-right text-gray-700">{{ $reservation->taxable_amount }}</td>
                 </tr>
                 <tr>
-                    <td class="text-left text-gray-700">Payment Status</td>
-                    <td class="text-right text-gray-700"> {{ $reservation->payment_status }}</td>
+                    <td class="text-left text-gray-700">Net Total</td>
+                    <td class="text-right text-gray-700"> {{ $reservation->net_total_amount }}</td>
                 </tr>
                 <tr>
                     <td class="text-left text-gray-700">Booked On</td>

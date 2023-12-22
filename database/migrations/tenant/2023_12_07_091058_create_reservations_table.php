@@ -17,8 +17,8 @@ return new class extends Migration
             $table->morphs('reservable'); // Reservable_type and Reservable_id
             $table->string('invoice_no')->unique();
             $table->unsignedBigInteger('business_id')->nullable();
-            $table->unsignedBigInteger('hotel_customer_id');
-            $table->foreign('customer_id')->references('id')->on('hotel_customers');
+            $table->unsignedBigInteger('customer_id');
+            $table->foreign('customer_id')->references('id')->on('customers');
             $table->unsignedBigInteger('hotel_room_id')->nullable();
             $table->foreign('hotel_room_id')->references('id')->on('hotel_rooms');
             
@@ -31,13 +31,13 @@ return new class extends Migration
             $table->decimal('sgst_amount', 10, 2)->nullable();
             $table->decimal('cgst_amount', 10, 2)->nullable();
             $table->decimal('igst_amount', 10, 2)->nullable();
-            $table->decimal('tax_amount', 10, 2);
+            $table->decimal('tax_amount', 10, 2)->nullable();
             $table->decimal('round_off_amount', 10, 2)->nullable();
             $table->decimal('net_total_amount', 10, 2);
             $table->string('reservation_status', 20);
             $table->string('payment_status', 20);
             $table->string('payment_method', 50);
-            $table->date('booked_on');
+            $table->date('booking_date');
             $table->dateTime('check_in_time');
             $table->dateTime('check_out_time');
             $table->boolean('is_confirmed');
