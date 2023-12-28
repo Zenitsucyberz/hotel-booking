@@ -71,11 +71,11 @@
                             </div>
 
                             <div class="mb-4">
-                                <x-input-label for="adults" :value="__('Adult No')" />
-                                <x-text-input id="adults" class="block mt-1 w-full customer" type="text"
-                                    name="adults" :value="old('adults')" required autofocus
-                                    autocomplete="adults" />
-                                <x-input-error :messages="$errors->get('adults')" class="mt-2" />
+                                <x-input-label for="adults_count" :value="__('Adult No')" />
+                                <x-text-input id="adults_count" class="block mt-1 w-full customer" type="text"
+                                    name="adults_count" :value="old('adults_count')" required autofocus
+                                    autocomplete="adults_count" />
+                                <x-input-error :messages="$errors->get('adults_count')" class="mt-2" />
                             </div>
 
                             <div class="mb-4">
@@ -456,12 +456,13 @@
                     var checkOutTime = $("#check_out_time").val();
                     var roomId = $("#room_id").val();
                     var guestCount = $("#guest_count").val();
+                    var adultsCount = $("#adults_count").val();
                     var discountType = $("#discount_type").val();
                     var discountAmount = $("#discount_amount").val();
                     var taxId = $("#tax_id").val();
 
                     if (customerId != null && checkInTime != null && checkOutTime != null && roomId != null &&
-                        guestCount != null ) {
+                        guestCount != null && adultsCount != null) {
                         $.ajax({
                             url: "{{ route('reservations.checkRoomAvailability') }}",
                             type: "POST",
@@ -472,6 +473,7 @@
                                 check_out_time: checkOutTime,
                                 room_id: roomId,
                                 guest_count: guestCount,
+                                adults_count: adultsCount,
                                 discount_type: discountType,
                                 discount_amount: discountAmount,
                                 tax_id: taxId,

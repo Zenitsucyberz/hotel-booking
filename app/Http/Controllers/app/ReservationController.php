@@ -55,7 +55,7 @@ class ReservationController extends Controller
             // 'check_in_date' => ['required','date'],
             // 'check_out_date' => ['required','date'],
             'guest_count' => ['required', 'integer'],
-            'adults' => ['required', 'integer'],
+            'adults_count' => ['required', 'integer'],
             'children' => ['required', 'integer'],
             // 'total_amount' => ['required','integer'],
             'discount_type' => ['required', 'string'],
@@ -113,7 +113,7 @@ class ReservationController extends Controller
         }
         $data['current_bookings'] = $booking;
 
-        $rent = $room->rate * $request->guest_count;
+        $rent = $room->rate * $request->adults_count;
         $data['rent'] = $rent;
         // room rent
 
@@ -209,7 +209,7 @@ class ReservationController extends Controller
         //     'hotel_room_id'  => ['required', 'integer'],
         //     // 'check_in_date' => ['required','date'],
         //     // 'check_out_date' => ['required','date'],
-        //     'guest_count' => ['required', 'integer'],
+        //     'adults_count' => ['required', 'integer'],
         //     // 'total_amount' => ['required','integer'],
         //     'discount_type' => ['required', 'string'],
         //     'discount_amount' => ['required', 'integer'],
@@ -292,8 +292,8 @@ class ReservationController extends Controller
         if ($booking < $room->room_count) {
 
             $data['current_bookings'] = $booking;
-
-            $rent = $room->rate * $request->guest_count;
+            
+            $rent = $room->rate * $request->adults_count;
             $data['rent'] = $rent;
             // room rent
 

@@ -2,7 +2,7 @@
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Reservations') }}
-
+            {{-- <x-btn-link class="ml-4 float-right" href="{{route('')}}">Add Domain</x-btn-link> --}}
         </h2>
     </x-slot>
 
