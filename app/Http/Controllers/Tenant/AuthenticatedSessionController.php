@@ -25,11 +25,30 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
 
-        $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+
+
+
+
+
+
+        if (Auth::guard('tenant')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
+
+
+            $request->session()->regenerate();
+
+            return redirect()->route('');
+
+        } else {
+
+
+
+
+            return back();
+        }
+
+
     }
 
     /**
@@ -37,7 +56,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        Auth::guard('web')->logout();
+        Auth::guard('tenant')->logout();
 
         $request->session()->invalidate();
 

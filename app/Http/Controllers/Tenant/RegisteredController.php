@@ -50,7 +50,7 @@ class RegisteredController extends Controller
 
 
         $tenant = LandlordTenant::find($tenant->id);
-        Auth::login($tenant);
+        Auth::guard('tenant')->login($tenant);
 
         return redirect(RouteServiceProvider::HOME);
     }
