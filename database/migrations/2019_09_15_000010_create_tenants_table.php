@@ -19,9 +19,8 @@ class CreateTenantsTable extends Migration
             $table->string('id')->primary();
             $table->string('name');
             $table->string('email');
-            $table->string('password'); 
-            
-
+            $table->string('password');
+            $table->rememberToken();
             $table->timestamps();
             $table->json('data')->nullable();
         });
