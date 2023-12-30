@@ -39,6 +39,8 @@ Route::middleware([
     PreventAccessFromCentralDomains::class,
 ])->group(function () {
     Route::get('/', function () {
+
+
         return view('app.welcome');
     });
 

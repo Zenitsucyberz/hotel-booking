@@ -37,6 +37,7 @@ class ReservationController extends Controller
         $rooms = HotelRoom::all();
         $users = User::all();
         $taxes = TaxType::all();
+
         return view('app.reservations.create', ['businesses' => $businesses, 'customers' => $customers, 'rooms' => $rooms, 'users' => $users, 'taxes' => $taxes]);
     }
 
@@ -58,14 +59,14 @@ class ReservationController extends Controller
             'adults_count' => ['required', 'integer'],
             'children' => ['required', 'integer'],
             // 'total_amount' => ['required','integer'],
-            'discount_type' => ['required', 'string'],
-            'discount_amount' => ['required', 'integer'],
+             'discount_type' => ['required', 'string'],
+            // 'discount_amount' => ['required', 'integer'],
             // 'taxable_amount' => ['required','integer'],
-            'tax_id'  => ['required', 'integer'],
+            // 'tax_id'  => ['required', 'integer'],
 
             // 'tax_amount' => ['required', 'integer'],
-            'round_off_amount' => ['required'],
-            'net_total_amount' => ['required', 'integer'],
+            // 'round_off_amount' => ['required'],
+            // 'net_total_amount' => ['required', 'integer'],
             'reservation_status' => ['required', 'string'],
             'payment_status' => ['required', 'string'],
             'payment_method' => ['required', 'string'],
@@ -132,16 +133,19 @@ class ReservationController extends Controller
         // discount amount
 
         // tax
-        
+
         $taxAmount = 0;
             if($request->has('tax_id')){
-               $taxRate = TaxType::find($request->tax_id); 
+               $taxRate = TaxType::find($request->tax_id);
                if($taxRate && $taxRate->tax_amount>0){
                 $taxAmount = ($taxRate->tax_amount / 100) * $discountedAmount;
                }
             }
-            
-            
+
+                $sgstAmount=0;
+                $cgstAmount=0;
+
+
             if ($taxAmount > 0) {
                 $sgstAmount = $taxAmount / 2;
                 $cgstAmount = $sgstAmount;
@@ -163,11 +167,14 @@ class ReservationController extends Controller
         $data['discountableAmount'] = $discountableAmount;
 
 
-        $input['total_amount'] = $rent;
+
+        $input['total_amount'] = $totalAmount;
+        $input['round_off_amount']=$roundOffAmount;
+
         $input['taxable_amount'] = $discountedAmount;
         $input['sgst_amount'] = $sgstAmount;
         $input['cgst_amount'] = $cgstAmount;
-        
+        $input['net_total_amount']= $netTotalAmount;
 
 
         $reservation = Reservation::create($input);
@@ -269,7 +276,7 @@ class ReservationController extends Controller
     public function checkRoomAvailability(Request $request)
     {
 
-        $room = HotelRoom::where('id', $request->room_id)->first();
+        $room = HotelRoom::where('id', $request->hotel_room_id)->first();
         $startDate = $request->check_in_time;
         $endDate = $request->check_out_time;
         $booking = Reservation::where('hotel_room_id', $room->id)
@@ -292,7 +299,7 @@ class ReservationController extends Controller
         if ($booking < $room->room_count) {
 
             $data['current_bookings'] = $booking;
-            
+
             $rent = $room->rate * $request->adults_count;
             $data['rent'] = $rent;
             // room rent
@@ -312,15 +319,15 @@ class ReservationController extends Controller
             // discount amount
 
             // tax
-            $taxAmount = 0;
+            $taxAmount=$sgstAmount=$cgstAmount= 0;
             if($request->has('tax_id')){
-               $taxRate = TaxType::find($request->tax_id); 
+               $taxRate = TaxType::find($request->tax_id);
                if($taxRate && $taxRate->tax_amount>0){
                 $taxAmount = ($taxRate->tax_amount / 100) * $discountedAmount;
                }
             }
-            
-            
+
+
             if ($taxAmount > 0) {
                 $sgstAmount = $taxAmount / 2;
                 $cgstAmount = $sgstAmount;
@@ -338,7 +345,8 @@ class ReservationController extends Controller
             $roomName = $room->room_label;
             $data['roomName'] = $roomName;
 
-            
+            $guestCount=$request->guest_count;
+            $data['guest_count']= $guestCount;
 
             return response()->json(['success' => true, 'data' => $data]);
         } else {
@@ -376,7 +384,7 @@ class ReservationController extends Controller
             })
             ->addColumn('actions', function ($reservation) {
                 return '
-                            
+
                             <button class="delete-button" data-action="' . route('reservations.destroy', $reservation->id) . '"><i class="fas fa-trash-alt"></i></button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <a class="view-button" href="' . route('reservations.show', $reservation->id) . '"><i class="fas fa-eye"></i></a>
                         ';

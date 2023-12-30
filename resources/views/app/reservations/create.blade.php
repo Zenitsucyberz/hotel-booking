@@ -21,7 +21,7 @@
                         <form method="POST" action="{{ route('reservations.store') }}">
                             @csrf
 
-                            
+
 
                             <div class="mb-4">
                                 <x-input-label for="customer_id" :value="__('Customer')" />
@@ -39,7 +39,7 @@
                                 <x-input-label for="check_in_time" :value="__('Check IN Time')" />
                                 <x-text-input id="check_in_time" class="block mt-1 w-full customer"
                                     type="datetime-local" name="check_in_time" :value="old('check_in_time')" required autofocus
-                                    autocomplete="check_in_time" />
+                                    autocomplete="check_in_time"/>
                                 <x-input-error :messages="$errors->get('check_in_time')" class="mt-2" />
                             </div>
 
@@ -47,7 +47,7 @@
                                 <x-input-label for="check_out_time" :value="__('Check Out Time')" />
                                 <x-text-input id="check_out_time" class="block mt-1 w-full customer"
                                     type="datetime-local" name="check_out_time" :value="old('check_out_time')" required autofocus
-                                    autocomplete="check_out_time" />
+                                    autocomplete="check_out_time"/>
                                 <x-input-error :messages="$errors->get('check_out_time')" class="mt-2" />
                             </div>
 
@@ -65,15 +65,15 @@
                             <div class="mb-4">
                                 <x-input-label for="guest_count" :value="__('Guest No')" />
                                 <x-text-input id="guest_count" class="block mt-1 w-full customer" type="text"
-                                    name="guest_count" :value="old('guest_count')" required autofocus
-                                    autocomplete="guest_count" />
+                                    name="guest_count" :value="old('guest_count',1)" required autofocus
+                                    autocomplete="guest_count"/>
                                 <x-input-error :messages="$errors->get('guest_count')" class="mt-2" />
                             </div>
 
                             <div class="mb-4">
                                 <x-input-label for="adults_count" :value="__('Adult No')" />
                                 <x-text-input id="adults_count" class="block mt-1 w-full customer" type="text"
-                                    name="adults_count" :value="old('adults_count')" required autofocus
+                                    name="adults_count" :value="old('adults_count',1)" required autofocus
                                     autocomplete="adults_count" />
                                 <x-input-error :messages="$errors->get('adults_count')" class="mt-2" />
                             </div>
@@ -81,7 +81,7 @@
                             <div class="mb-4">
                                 <x-input-label for="children" :value="__('Child No')" />
                                 <x-text-input id="children" class="block mt-1 w-full customer" type="text"
-                                    name="children" :value="old('children')" required autofocus
+                                    name="children" :value="old('children',0)" required autofocus
                                     autocomplete="children" />
                                 <x-input-error :messages="$errors->get('childrens')" class="mt-2" />
                             </div>
@@ -92,20 +92,6 @@
                                 {{ __('ADD Customer') }}
                             </x-btn-link>
 
-
-                            <div class="mb-4">
-                                <x-input-label for="room_amount" :value="__('Room Amount')" />
-                                <x-text-input id="room_amount" class="block mt-1 w-full " type="text"
-                                    name="room_amount" :value=" old('room_amount')" required autofocus
-                                    autocomplete="room_amount" />
-                                <x-input-error :messages="$errors->get('room_amount')" class="mt-2" />
-                            </div>
-
-                            
-
-
-                            
-
                             <div class="mb-4">
                                 <x-input-label for="discount_type" :value="__('Discount Type')" />
                                 <select class="customer" id="discount_type" name="discount_type">
@@ -115,6 +101,16 @@
                                     <option value="special">Special</option>
                                 </select>
                             </div>
+
+                            {{-- <div class="mb-4">
+                                <x-input-label for="room_amount" :value="__('Room Amount')" />
+                                <x-text-input id="room_amount" class="block mt-1 w-full " type="text"
+                                    name="room_amount" :value=" old('room_amount')" required autofocus
+                                    autocomplete="room_amount" />
+                                <x-input-error :messages="$errors->get('room_amount')" class="mt-2" />
+                            </div>
+
+
 
                             <div class="mb-4">
                                 <x-input-label for="discount_amount" :value="__('Discount Amount ')" />
@@ -149,7 +145,7 @@
                                 <x-input-error :messages="$errors->get('tax_id')" class="mt-2" />
                             </div>
 
-                            {{-- --}}
+
 
                             <div class="mb-4">
                                 <x-input-label for="sgst_amount" :value="__('SGST Amount')" />
@@ -157,23 +153,23 @@
                                     :value="old('sgst_amount')" required autofocus autocomplete="sgst_amount" />
                                 <x-input-error :messages="$errors->get('sgst_amount')" class="mt-2" />
                             </div>
-                           
+
                             <div class="mb-4">
                                 <x-input-label for="cgst_amount" :value="__('CGST Amount')" />
                                 <x-text-input id="cgst_amount" class="block mt-1 w-full" type="text" name="cgst_amount"
                                     :value="old('cgst_amount')" required autofocus autocomplete="cgst_amount" />
                                 <x-input-error :messages="$errors->get('cgst_amount')" class="mt-2" />
                             </div>
-                            
+
 
                             <div class="mb-4">
                                 <x-input-label for="total_amount" :value="__('Total Amount')" />
                                 <x-text-input id="total_amount" class="block mt-1 w-full" type="text" name="total_amount"
                                     :value="old('total_amount')" required autofocus autocomplete="total_amount" />
                                 <x-input-error :messages="$errors->get('total_amount')" class="mt-2" />
-                            </div> 
+                            </div>
 
-                            
+
 
                             <div class="mb-4">
                                 <x-input-label for="round_off_amount" :value="__('Round Off Amount')" />
@@ -188,7 +184,7 @@
                                     name="net_total_amount" :value="old('net_total_amount')" required autofocus
                                     autocomplete="net_total_amount" />
                                 <x-input-error :messages="$errors->get('net_total_amount')" class="mt-2" />
-                            </div>
+                            </div> --}}
 
                             <div class="mb-4">
                                 <x-input-label for="reservation_status" :value="__('Reservation Status')" />
@@ -267,8 +263,8 @@
                                     @foreach ($users as $user)
                                     <option value="{{$user->name}}">{{$user->name}}</option>
                                     @endforeach
-                                    
-                                    
+
+
                                 </select>
                             </div>
                             <div class="mb-4">
@@ -277,8 +273,8 @@
                                     @foreach ($users as $user)
                                     <option value="{{$user->name}}">{{$user->name}}</option>
                                     @endforeach
-                                    
-                                    
+
+
                                 </select>
                             </div> --}}
 
@@ -310,7 +306,7 @@
         <div class="col-6">
 
 
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto sm:px-3 lg:px-4">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
 
@@ -323,53 +319,51 @@
                                 <tr>
 
                                     <th scope="col"
-                                        class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">#</th>
+                                        class="px-4 py-3 text-start text-xs font-medium text-gray-500 uppercase">#</th>
                                     <th scope="col"
-                                        class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Item
+                                        class="px-4 py-3 text-start text-xs font-medium text-gray-500 uppercase">Item
                                     </th>
                                     <th scope="col"
-                                        class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Qty
+                                        class="px-4 py-3 text-start text-xs font-medium text-gray-500 uppercase">Qty
                                     </th>
                                     <th scope="col"
-                                        class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Amount
+                                        class="px-4 py-3 text-start text-xs font-medium text-gray-500 uppercase">Amount
                                     </th>
                                     <th scope="col"
-                                        class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
+                                        class="px-4 py-3 text-start text-xs font-medium text-gray-500 uppercase">
                                         Discount</th>
                                     <th scope="col"
-                                        class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Total
+                                        class="px-4 py-3 text-start text-xs font-medium text-gray-500 uppercase">Total
                                     </th>
                                     <th scope="col"
-                                        class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">SGST
+                                        class="px-4 py-3 text-start text-xs font-medium text-gray-500 uppercase">SGST
                                     </th>
                                     <th scope="col"
-                                        class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">CGST
+                                        class="px-4 py-3 text-start text-xs font-medium text-gray-500 uppercase">CGST
                                     </th>
                                     <th scope="col"
-                                        class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Net
+                                        class="px-4 py-3 text-start text-xs font-medium text-gray-500 uppercase">Net
                                         Total</th>
 
 
                                 </tr>
                             </thead>
-                            <tbody id="tbody" >
+                            <tbody id="tbody" name="tbody">
                                 <tr>
 
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium " id="td" ></td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium "> </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium "></td>
-                                    
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium "></td>
+
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium "></td>
 
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium "></td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium "></td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium "></td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium "></td>
-
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium "></td>
 
                                 </tr>
-
-
                             </tbody>
 
 
@@ -425,7 +419,7 @@
               /* Set "my-sec-counter" to 0 */
               counter-reset: my-sec-counter;
             }
-            
+
             tbody tr th:first-child::before {
               /* Decrement "my-sec-counter" by 1 */
               counter-increment: my-sec-counter 1;
@@ -438,13 +432,13 @@
 
         <script>
             // Initialize Bootstrap Datepicker
-            $(document).ready(function() {
-                $('.datepicker').datepicker({
-                    format: 'yyyy-mm-dd',
-                    autoclose: true,
-                    todayHighlight: true
-                });
-            });
+            // $(document).ready(function() {
+            //     $('.datepicker').datepicker({
+            //         format: 'yyyy-mm-dd',
+            //         autoclose: true,
+            //         todayHighlight: true
+            //     });
+            // });
 
 
             $(document).ready(function() {
@@ -457,12 +451,15 @@
                     var roomId = $("#room_id").val();
                     var guestCount = $("#guest_count").val();
                     var adultsCount = $("#adults_count").val();
+                    var children = $('#children').val();
                     var discountType = $("#discount_type").val();
-                    var discountAmount = $("#discount_amount").val();
-                    var taxId = $("#tax_id").val();
 
+                    // var discountAmount = $("#discount_amount").val();
+                    // var taxId = $("#tax_id").val();
+
+// console.table(customerId,checkInTime,checkOutTime,roomId,guestCount,adultsCount,children,discountType);
                     if (customerId != null && checkInTime != null && checkOutTime != null && roomId != null &&
-                        guestCount != null && adultsCount != null) {
+                        guestCount != null && adultsCount != null && children != null && discountType != null) {
                         $.ajax({
                             url: "{{ route('reservations.checkRoomAvailability') }}",
                             type: "POST",
@@ -471,26 +468,31 @@
                                 customer_id: customerId,
                                 check_in_time: checkInTime,
                                 check_out_time: checkOutTime,
-                                room_id: roomId,
+                                hotel_room_id: roomId,
                                 guest_count: guestCount,
                                 adults_count: adultsCount,
+                                children: children,
                                 discount_type: discountType,
-                                discount_amount: discountAmount,
-                                tax_id: taxId,
+                                // discount_amount: discountAmount,
+                                // tax_id: taxId,
                             },
                             success: function(result) {
 
                                 if (result.success == true) {
-                                   var roomAmount = $('#room_amount').val(result.data.rent);
-                                   var discountedAmount =  $('#discounted_amount').val(result.data.discounted_amount);
+
+//  console.log(result.data);
+
+                                   var rent = $('#room_amount').val(result.data.rent);
+                                   var $discountedAmount =  $('#taxable_Amount').val(result.data.$discountedAmount);
                                    var totalAmount =  $('#total_amount').val(result.data.total);
                                    var roundOffAmount =  $('#round_off_amount').val(result.data.roundOffAmount);
+                                   var sgstAmount = $('#sgst_amount').val(result.data.sgst);
+                                   var cgstAmount =$('#cgst_amount').val(result.data.cgst);
                                    var netTotalAmount =  $('#net_total_amount').val(result.data.netTotal);
-                                   var sgstAmount = $('#sgst_amount').val(result.data.sgst)
-                                   var cgstAmount =$('#cgst_amount').val(result.data.cgst)
+
                                     $('#add').prop('disabled', false);
 
-                                    var table = '<tr><th ></th><th>'+result.data.roomName+'</th><th>'+guestCount+'</th><th>'+result.data.rent+'</th><th>'+result.data.discountableAmount+'</th><th>'+result.data.taxes+'</th><th>'+result.data.sgst+'</th><th>'+result.data.cgst+'</th></tr>'
+                                    var table = '<tr><th></th><th>'+result.data.roomName+'</th><th>'+result.data.guest_count+'</th><th>'+result.data.rent+'</th><th>'+result.data.discounted_amount+'</th><th>'+result.data.total+'</th><th>'+result.data.sgst+'</th><th>'+result.data.cgst+'</th><th>'+result.data.netTotal+'</th></tr>'
 
                                         $("#tbody").html(table);
 
@@ -507,6 +509,7 @@
 
                 });
             });
+
 
             $(document).ready(function() {
 
@@ -533,6 +536,8 @@
                 });
 
             });
+
+
 
             // $(document).ready(function() {
             //     $('').change(function() {
@@ -561,7 +566,7 @@
             //                 }
 
             //             });
-                    
+
 
 
             //     });
